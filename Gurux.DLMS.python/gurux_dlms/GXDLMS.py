@@ -372,7 +372,7 @@ class GXDLMS:
                         reply.setUInt8(1)
                     reply.setUInt8(p.status)
                 if p.data:
-                    len_ = reply.data.size - reply.data.position
+                    len_ = p.data.size - p.data.position
                 else:
                     len_ = 0
                 totalLength = len_ + len(reply)
