@@ -1463,7 +1463,7 @@ class GXDLMS:
                     settings.setBlockIndex(0)
                 expectedIndex = settings.blockIndex
                 if number != expectedIndex:
-                    raise ValueError("Invalid Block number. It is " + number + " and it should be " + expectedIndex + ".")
+                    raise ValueError("Invalid Block number. It is %d and it should be %d." % (number, expectedIndex))
             ch = data.getUInt8()
             if ch != 0:
                 reply.error = data.getUInt8()
