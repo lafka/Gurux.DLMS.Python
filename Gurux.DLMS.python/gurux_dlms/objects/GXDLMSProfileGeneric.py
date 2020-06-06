@@ -409,7 +409,7 @@ class GXDLMSProfileGeneric(GXDLMSObject, IGXDLMSBase):
             if e.value is None:
                 self.sortMethod = SortMethod.FIFO
             else:
-                self.sortMethod = e.value
+                self.sortMethod = SortMethod(e.value)
         elif e.index == 6:
             if settings and settings.isServer:
                 self.__reset()
