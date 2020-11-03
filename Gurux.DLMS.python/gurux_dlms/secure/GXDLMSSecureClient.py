@@ -35,6 +35,9 @@ from ..enums import InterfaceType, Authentication
 from ..GXDLMSClient import GXDLMSClient
 from ..GXCiphering import GXCiphering
 from ..GXDLMSChipperingStream import GXDLMSChipperingStream
+import logging
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
 
 #pylint: disable=too-many-arguments
 class GXDLMSSecureClient(GXDLMSClient):
@@ -79,6 +82,7 @@ class GXDLMSSecureClient(GXDLMSClient):
             raise ValueError("Key Encrypting Key")
         if not data:
             raise ValueError("data")
+        logger.debug("pre-encrypt: %s", data)
         gcm = GXDLMSChipperingStream(None, True, kek, None, None, 0)
         return gcm.encryptAes(data)
 
@@ -98,7 +102,12 @@ class GXDLMSSecureClient(GXDLMSClient):
         if not data:
             raise ValueError("data")
         gcm = GXDLMSChipperingStream(None, False, kek, None, None, 0)
-        return gcm.decryptAes(data)
+        plaintext = gcm.decryptAes(data)
+        buf = ""
+        for e in plaintext:
+          buf += "%02x " % (e, )
+        logger.debug("decrypted: %s", buf)
+        return plaintext
 
     def __getSecuritySuite(self):
         return self.ciphering.securitySuite

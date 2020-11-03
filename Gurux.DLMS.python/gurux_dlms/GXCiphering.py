@@ -38,6 +38,10 @@ from .GXDLMSChippering import GXDLMSChippering
 from .AesGcmParameter import AesGcmParameter
 from .GXByteBuffer import GXByteBuffer
 
+import logging
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+
 # pylint: disable=too-many-instance-attributes, too-many-function-args, too-many-public-methods
 class GXCiphering(GXICipher):
     """
@@ -82,6 +86,10 @@ class GXCiphering(GXICipher):
         tmp = []
         p.sharedSecret = c.sharedSecret
         tmp = GXDLMSChippering.decryptAesGcm(p, data)
+        buf = ""
+        for e in tmp:
+          buf += "%02x " % (e, )
+        logger.debug("decrypted: %s", buf)
         c.sharedSecret = p.sharedSecret
         return tmp
 
@@ -97,6 +105,7 @@ class GXCiphering(GXICipher):
     @classmethod
     def encrypt(cls, p, data):
         if p.security != Security.NONE:
+            logger.debug("pre-encrypt: %s", data)
             tmp = GXDLMSChippering.encryptAesGcm(p, data)
             return tmp
         return data
