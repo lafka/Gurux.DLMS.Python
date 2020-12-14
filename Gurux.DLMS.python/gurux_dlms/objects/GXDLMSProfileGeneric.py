@@ -485,9 +485,16 @@ class GXDLMSProfileGeneric(GXDLMSObject, IGXDLMSBase):
                         scaler_ = item[0].scaler
                         if scaler_ != 1 and data:
                             try:
+                                was_tuple = isinstance(row, tuple)
+                                if was_tuple:
+                                    row = list(row)
+
                                 decimals = int(-1 * math.log10(scaler_))
                                 row[colIndex] = round(
                                     Decimal(data) * Decimal(scaler_), decimals)
+
+                                if was_tuple:
+                                    row = tuple(row)
                             except Exception as e2:
                                 print("Scalar failed for: {}".format(
                                     item[0].logicalName))
